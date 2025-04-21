@@ -237,38 +237,21 @@ function addEventListeners() {
  * Note: This is a placeholder for actual API calls
  */
 async function fetchDashboardData() {
-    // Determine if we're on GitHub Pages or local development
-    const isGitHubPages = window.location.hostname.includes('github.io');
-    
-    // Define base URLs based on environment
-    const baseApiUrl = isGitHubPages 
-        ? `/${window.location.pathname.split('/')[1]}/api` // GitHub Pages path with repo name
-        : '/api'; // Local development
-    
     console.log('Fetching dashboard data...');
     
     try {
         // Fetch client data
-        const clientsResponse = isGitHubPages
-            ? await fetch(`${baseApiUrl}/clients/index.json`)
-            : await fetch(`${baseApiUrl}/clients`);
-        
+        const clientsResponse = await fetch('/api/clients');
         const clients = await clientsResponse.json();
         console.log('Client data received:', clients);
         
         // Fetch events data
-        const eventsResponse = isGitHubPages
-            ? await fetch(`${baseApiUrl}/events/index.json`)
-            : await fetch(`${baseApiUrl}/events`);
-        
+        const eventsResponse = await fetch('/api/events');
         const events = await eventsResponse.json();
         console.log('Events data received:', events);
         
         // Fetch stats data
-        const statsResponse = isGitHubPages
-            ? await fetch(`${baseApiUrl}/stats/index.json`)
-            : await fetch(`${baseApiUrl}/stats`);
-        
+        const statsResponse = await fetch('/api/stats');
         const stats = await statsResponse.json();
         console.log('Stats data received:', stats);
         

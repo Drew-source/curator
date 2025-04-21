@@ -39,31 +39,16 @@ document.addEventListener('DOMContentLoaded', () => {
                     return;
                 }
 
-                // Determine if we're on GitHub Pages or local development
-                const isGitHubPages = window.location.hostname.includes('github.io');
-                let result;
-
-                if (isGitHubPages) {
-                    // On GitHub Pages, simulate a successful response
-                    // Add a small delay to simulate network latency
-                    await new Promise(resolve => setTimeout(resolve, 1000));
-                    
-                    result = {
-                        success: true,
-                        message: 'Your inquiry has been received. A member of our team will contact you within 24 hours.'
-                    };
-                } else {
-                    // Send data to the server using fetch API - normal API flow
-                    const response = await fetch('/api/contact', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify(formData)
-                    });
-                    
-                    result = await response.json();
-                }
+                // Send data to the server using fetch API
+                const response = await fetch('/api/contact', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                });
+                
+                const result = await response.json();
                 
                 if (result.success) {
                     // Show success message

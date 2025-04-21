@@ -28,7 +28,7 @@ CURATOR is an advanced AI-powered system designed for luxury brands to recognize
 - **Backend**: Node.js with Express
 - **API**: RESTful endpoints for contact form and data handling
 - **Development Tools**: Browser-tools-mcp for performance and accessibility monitoring
-- **CI/CD**: GitHub Actions for automated deployment
+- **CI/CD**: GitHub Actions for automated deployment to Google Cloud VM
 
 ## 📂 Project Structure
 
@@ -89,20 +89,33 @@ curator/
 
 ## 🌐 Deployment
 
-### GitHub Pages (Static Version)
+### Google Cloud VM Deployment
 
-The project is automatically deployed to GitHub Pages via GitHub Actions when changes are pushed to the main branch. The static version simulates API responses and form submissions for demonstration purposes.
+This project is configured to deploy automatically to Google Cloud VM using GitHub Actions:
 
-View the live demo at: [https://drew-source.github.io/curator/](https://drew-source.github.io/curator/)
+1. **CI/CD Pipeline**:
+   - Automated testing and building on each push to the main branch
+   - Automatic deployment to Google Cloud VM when tests pass
+   - Zero-downtime deployment with PM2
 
-### Full Backend Deployment (Planned)
+2. **Deployment Process**:
+   - GitHub Actions workflow pushes code to the VM
+   - Dependencies are installed and updated
+   - Application is restarted using PM2
+   - Health checks confirm successful deployment
 
-For production use with full backend functionality, deployment to Google Cloud is planned:
+3. **Required Configuration**:
+   - Google Cloud VM with Node.js and PM2 installed
+   - Project secrets configured in GitHub repository
+   - SSH key access for secure deployment
 
-1. Create a Google Cloud VM instance (Compute Engine)
-2. Configure GitHub Actions for CI/CD pipeline
-3. Set up environment with Node.js, Express, and PM2
-4. Configure domain and SSL certificate
+4. **Repository Secrets Required**:
+   - `GCP_PROJECT_ID`: Your Google Cloud project ID
+   - `GCP_SA_KEY`: Service account key for Google Cloud
+   - `GCP_SSH_PRIVATE_KEY`: SSH key for VM access
+   - `GCP_ZONE`: VM zone (e.g., us-central1-a)
+   - `GCP_VM_NAME`: Name of your VM instance
+   - `CURATOR_DOMAIN`: Domain name for your application
 
 ## 📝 Development Notes
 

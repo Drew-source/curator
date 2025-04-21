@@ -129,9 +129,8 @@ curator/
   - Improved button functionality and appearance
   - Fixed "Request Private Demonstration" button
   - Enhanced client database view/edit button layout
-  - Implemented GitHub Pages deployment with static API mocks
-  - Created GitHub Actions workflow for automated deployment
-  - Added routing for GitHub Pages compatibility
+  - Configured GitHub Actions for Google Cloud VM deployment
+  - Set up CI/CD pipeline for automated deployment
   
 ## Next Steps
 1. Implement MongoDB database connection
@@ -143,16 +142,8 @@ curator/
 
 ## Deployment Options
 
-### GitHub Pages Deployment
-For static site hosting and demonstration purposes:
-
-1. Create a GitHub repository
-2. Push code to the repository
-3. Enable GitHub Pages in repository settings
-4. The site is automatically deployed via GitHub Actions
-
-### Google Cloud Deployment (Planned)
-For full functionality with backend server:
+### Google Cloud Deployment
+For production deployment with full functionality:
 
 1. Create a Google Cloud VM instance
 2. Set up the deployment workflow with GitHub Actions

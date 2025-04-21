@@ -6,42 +6,6 @@
     <title>CURATOR | Page Not Found</title>
     <link rel="stylesheet" href="/css/styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;400;500&display=swap" rel="stylesheet">
-    <script>
-        // This script redirects to the right pages when on GitHub Pages
-        (function() {
-            // GitHub Pages Routing Adapter
-            var pathSegmentsToKeep = 1; // Keep only the part after repository name
-            
-            var location = window.location;
-            var pathName = location.pathname;
-            
-            // Extract repository name
-            var repoName = location.pathname.split('/')[1];
-            
-            // Handle 404 routing for SPA on GitHub Pages
-            var redirect = sessionStorage.redirect;
-            delete sessionStorage.redirect;
-            
-            if (redirect && redirect !== location.href) {
-                history.replaceState(null, null, redirect);
-                return;
-            }
-            
-            // Check if this is a direct 404 page access
-            if (pathName.includes('/404.html')) {
-                // Try to recover the original URL
-                var path = sessionStorage.getItem('path_redirect');
-                if (path) {
-                    delete sessionStorage.path_redirect;
-                    // Redirect to the path
-                    window.location.href = '/' + repoName + path;
-                } else {
-                    // Redirect to home page
-                    window.location.href = '/' + repoName;
-                }
-            }
-        })();
-    </script>
     <style>
         .not-found-container {
             display: flex;
