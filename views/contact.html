@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://code.jquery.com https://unpkg.com https://d3js.org https://threejs.org https://cdn.plot.ly https://stackpath.bootstrapcdn.com https://maps.googleapis.com https://cdn.tailwindcss.com https://ajax.googleapis.com https://kit.fontawesome.com https://cdn.datatables.net https://maxcdn.bootstrapcdn.com https://code.highcharts.com https://tako-static-assets-production.s3.amazonaws.com https://www.youtube.com https://fonts.googleapis.com https://fonts.gstatic.com https://pfst.cf2.poecdn.net https://puc.poecdn.net https://i.imgur.com https://wikimedia.org https://*.icons8.com https://*.giphy.com https://picsum.photos https://images.unsplash.com; frame-src 'self' https://www.youtube.com https://trytako.com; child-src 'self'; manifest-src 'self'; worker-src 'self'; upgrade-insecure-requests; block-all-mixed-content;">
+    <title>CURATOR | Contact Us</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;400;500&display=swap" rel="stylesheet">
+    <style>
+        .contact-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            padding: 3rem 0;
+        }
+        
+        .contact-info {
+            background-color: rgba(255,255,255,0.05);
+            padding: 2rem;
+            border-left: 3px solid var(--secondary);
+        }
+        
+        .contact-info h2 {
+            color: var(--secondary);
+            margin-bottom: 1.5rem;
+            font-weight: 300;
+        }
+        
+        .contact-detail {
+            margin-bottom: 1.5rem;
+        }
+        
+        .contact-detail h3 {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            font-weight: 400;
+            color: var(--secondary);
+        }
+        
+        .contact-detail p {
+            font-weight: 300;
+            margin-bottom: 0.25rem;
+        }
+        
+        .contact-detail a {
+            color: var(--light);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .contact-detail a:hover {
+            color: var(--secondary);
+        }
+        
+        .contact-form {
+            background-color: rgba(255,255,255,0.05);
+            padding: 2rem;
+            border-left: 3px solid var(--secondary);
+        }
+        
+        .contact-form h2 {
+            color: var(--secondary);
+            margin-bottom: 1.5rem;
+            font-weight: 300;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--secondary);
+            font-size: 0.9rem;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 0.75rem;
+            background-color: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: var(--light);
+            font-family: 'Montserrat', sans-serif;
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: var(--secondary);
+        }
+        
+        textarea.form-control {
+            min-height: 150px;
+            resize: vertical;
+        }
+        
+        @media (max-width: 768px) {
+            .contact-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="nav-container">
+                <div class="brand-container">
+                    <div class="logo">CURATOR</div>
+                    <div class="tagline">ALGORITHMIC ACCESS MANAGEMENT</div>
+                    <div class="blackcode-badge">A solution by <a href="https://blackcode.ch" target="_blank">blackcode SA</a></div>
+                </div>
+                
+                <nav>
+                    <ul class="nav-menu">
+                        <li><a href="/">Home</a></li>
+                        <li><a href="/demo">Live Demo</a></li>
+                        <li><a href="/admin">Dashboard</a></li>
+                        <li><a href="/contact" class="active">Contact Us</a></li>
+                    </ul>
+                    <div class="hamburger">
+                        <span class="bar"></span>
+                        <span class="bar"></span>
+                        <span class="bar"></span>
+                    </div>
+                </nav>
+            </div>
+        </div>
+    </header>
+    
+    <div class="container">
+        <section class="contact-container">
+            <div class="contact-info">
+                <h2>Get in Touch</h2>
+                
+                <div class="contact-detail">
+                    <h3>Request a Private Demonstration</h3>
+                    <p>Experience the CURATOR system in your own luxury environment.</p>
+                    <p>Our team will set up a personalized demonstration tailored to your brand's unique needs.</p>
+                </div>
+                
+                <div class="contact-detail">
+                    <h3>Email</h3>
+                    <p><a href="mailto:inquiries@blackcode.ch">inquiries@blackcode.ch</a></p>
+                </div>
+                
+                <div class="contact-detail">
+                    <h3>Office Location</h3>
+                    <p>blackcode SA</p>
+                    <p>Bahnhofstrasse 10</p>
+                    <p>8001 Zürich, Switzerland</p>
+                </div>
+                
+                <div class="contact-detail">
+                    <h3>Privacy Assurance</h3>
+                    <p>CURATOR places the highest priority on privacy and data security. All client information and recognition data are handled with the utmost confidentiality and in compliance with relevant privacy regulations.</p>
+                </div>
+            </div>
+            
+            <div class="contact-form">
+                <h2>Inquiry Form</h2>
+                
+                <form id="contactForm">
+                    <div class="form-group">
+                        <label for="name">Your Name</label>
+                        <input type="text" id="name" name="name" class="form-control" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="company">Company / Brand</label>
+                        <input type="text" id="company" name="company" class="form-control" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" name="email" class="form-control" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="phone">Phone Number</label>
+                        <input type="tel" id="phone" name="phone" class="form-control">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="interest">Area of Interest</label>
+                        <select id="interest" name="interest" class="form-control">
+                            <option value="">Please select...</option>
+                            <option value="retail">Luxury Retail</option>
+                            <option value="event">Exclusive Events</option>
+                            <option value="hospitality">Luxury Hospitality</option>
+                            <option value="gallery">Art Gallery / Museum</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="message">Your Message</label>
+                        <textarea id="message" name="message" class="form-control" required></textarea>
+                    </div>
+                    
+                    <button type="submit" class="cta-button">Submit Inquiry</button>
+                </form>
+            </div>
+        </section>
+    </div>
+    
+    <footer>
+        <div class="container">
+            <p>CURATOR • Premium Access Management • Inquiries: <a href="mailto:inquiries@blackcode.ch">inquiries@blackcode.ch</a></p>
+            <p class="blackcode-badge">Developed by <a href="https://blackcode.ch" target="_blank">blackcode SA</a> — Swiss boutique web and app agency for luxury brands</p>
+        </div>
+    </footer>
+
+    <script src="/js/nav.js"></script>
+    <script src="/js/contact.js"></script>
+</body>
+</html> 

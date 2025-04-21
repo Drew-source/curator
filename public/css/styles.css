@@ -1,0 +1,330 @@
+:root {
+    --primary: #1a1a1a;
+    --secondary: #b8860b;
+    --light: #f5f5f5;
+    --dark: #0a0a0a;
+    --spacing: 2rem;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Montserrat', sans-serif;
+}
+
+body {
+    background-color: var(--primary);
+    color: var(--light);
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+header {
+    padding: var(--spacing) 0;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.logo {
+    font-size: 2rem;
+    font-weight: 300;
+    letter-spacing: 0.5rem;
+    color: var(--light);
+}
+
+.tagline {
+    color: var(--secondary);
+    font-size: 1rem;
+    font-weight: 300;
+    letter-spacing: 0.2rem;
+    margin-top: 0.5rem;
+}
+
+/* Navigation Styles */
+.nav-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 0;
+}
+
+.brand-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.nav-menu {
+    display: flex;
+    list-style: none;
+}
+
+.nav-menu li {
+    margin-left: 2rem;
+}
+
+.nav-menu a {
+    color: var(--light);
+    text-decoration: none;
+    font-size: 0.9rem;
+    letter-spacing: 0.1rem;
+    text-transform: uppercase;
+    font-weight: 300;
+    transition: color 0.3s ease;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid transparent;
+}
+
+.nav-menu a:hover, 
+.nav-menu a.active {
+    color: var(--secondary);
+    border-bottom: 1px solid var(--secondary);
+}
+
+.hamburger {
+    display: none;
+    cursor: pointer;
+}
+
+.hamburger .bar {
+    display: block;
+    width: 25px;
+    height: 2px;
+    margin: 5px auto;
+    background-color: var(--light);
+    transition: all 0.3s ease;
+}
+
+.blackcode-badge {
+    display: inline-block;
+    margin-top: 0.5rem;
+    font-size: 0.8rem;
+    color: rgba(255,255,255,0.7);
+}
+
+.blackcode-badge a, 
+footer a {
+    color: var(--secondary);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.blackcode-badge a:hover,
+footer a:hover {
+    color: var(--light);
+}
+
+/* Ensure footer links are visible */
+footer a {
+    color: var(--light);
+}
+
+footer a:hover {
+    color: var(--secondary);
+}
+
+.hero {
+    height: 80vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    position: relative;
+}
+
+.hero h1 {
+    font-size: 3.5rem;
+    font-weight: 200;
+    margin-bottom: 1rem;
+    line-height: 1.2;
+}
+
+.hero p {
+    font-size: 1.2rem;
+    max-width: 600px;
+    margin-bottom: 2rem;
+    font-weight: 300;
+}
+
+.cta-button {
+    background-color: var(--secondary);
+    color: var(--dark);
+    padding: 0.8rem 2rem;
+    border: none;
+    font-size: 1rem;
+    letter-spacing: 0.1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+}
+
+.cta-button:hover {
+    background-color: var(--light);
+}
+
+.features {
+    padding: var(--spacing) 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+.feature {
+    padding: 2rem;
+    background-color: rgba(255,255,255,0.05);
+    border-left: 3px solid var(--secondary);
+}
+
+.feature h3 {
+    margin-bottom: 1rem;
+    font-weight: 400;
+    color: var(--secondary);
+}
+
+.testimonials {
+    padding: var(--spacing) 0;
+}
+
+.testimonial {
+    padding: 2rem;
+    margin-bottom: 2rem;
+    background-color: rgba(255,255,255,0.05);
+    border-radius: 5px;
+}
+
+.testimonial p {
+    font-style: italic;
+    margin-bottom: 1rem;
+}
+
+.testimonial-author {
+    text-align: right;
+    color: var(--secondary);
+}
+
+footer {
+    padding: var(--spacing) 0;
+    text-align: center;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    font-size: 0.8rem;
+    color: rgba(255,255,255,0.5);
+}
+
+/* Dashboard Enhancements */
+.client-table a {
+    color: var(--light);
+    text-decoration: none;
+    background-color: var(--secondary);
+    padding: 0.3rem 0.7rem;
+    border-radius: 3px;
+    margin-right: 0.5rem;
+    display: inline-block;
+    transition: background-color 0.3s ease;
+}
+
+.client-table a:hover {
+    background-color: #d9a012; /* Slightly lighter gold */
+    color: var(--dark);
+}
+
+.client-table a.view-link {
+    background-color: var(--secondary); /* Gold color */
+}
+
+.client-table a.edit-link {
+    background-color: #4a90e2; /* Blue color */
+}
+
+/* Fix dropdown text visibility */
+select, 
+.form-control,
+option {
+    color: var(--dark);
+    background-color: var(--light);
+}
+
+select:focus, 
+.form-control:focus {
+    border-color: var(--secondary);
+    outline: none;
+}
+
+/* System Configuration Dropdowns */
+.settings-form select,
+.settings-card select {
+    width: 100%;
+    padding: 0.75rem;
+    background-color: var(--light);
+    border: 1px solid rgba(0,0,0,0.2);
+    color: var(--dark);
+    font-family: 'Montserrat', sans-serif;
+}
+
+/* User Management Table */
+.user-table a.edit-link {
+    background-color: #4a90e2; /* Blue color */
+    color: var(--light);
+    text-decoration: none;
+    padding: 0.3rem 0.7rem;
+    border-radius: 3px;
+    display: inline-block;
+}
+
+.user-table a.edit-link:hover {
+    background-color: #6aa9ed; /* Lighter blue */
+}
+
+@media (max-width: 768px) {
+    .nav-menu {
+        position: fixed;
+        left: -100%;
+        top: 5rem;
+        flex-direction: column;
+        background-color: var(--dark);
+        width: 100%;
+        text-align: center;
+        transition: 0.3s;
+        box-shadow: 0 10px 27px rgba(0, 0, 0, 0.05);
+        z-index: 10;
+    }
+
+    .nav-menu.active {
+        left: 0;
+    }
+
+    .nav-menu li {
+        margin: 1.5rem 0;
+    }
+
+    .hamburger {
+        display: block;
+    }
+
+    .hamburger.active .bar:nth-child(2) {
+        opacity: 0;
+    }
+
+    .hamburger.active .bar:nth-child(1) {
+        transform: translateY(7px) rotate(45deg);
+    }
+
+    .hamburger.active .bar:nth-child(3) {
+        transform: translateY(-7px) rotate(-45deg);
+    }
+
+    .hero h1 {
+        font-size: 2.5rem;
+    }
+    
+    .hero p {
+        font-size: 1rem;
+    }
+    
+    .features {
+        grid-template-columns: 1fr;
+    }
+} 

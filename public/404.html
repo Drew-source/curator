@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CURATOR | Page Not Found</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;400;500&display=swap" rel="stylesheet">
+    <script>
+        // This script redirects to the right pages when on GitHub Pages
+        (function() {
+            // GitHub Pages Routing Adapter
+            var pathSegmentsToKeep = 1; // Keep only the part after repository name
+            
+            var location = window.location;
+            var pathName = location.pathname;
+            
+            // Extract repository name
+            var repoName = location.pathname.split('/')[1];
+            
+            // Handle 404 routing for SPA on GitHub Pages
+            var redirect = sessionStorage.redirect;
+            delete sessionStorage.redirect;
+            
+            if (redirect && redirect !== location.href) {
+                history.replaceState(null, null, redirect);
+                return;
+            }
+            
+            // Check if this is a direct 404 page access
+            if (pathName.includes('/404.html')) {
+                // Try to recover the original URL
+                var path = sessionStorage.getItem('path_redirect');
+                if (path) {
+                    delete sessionStorage.path_redirect;
+                    // Redirect to the path
+                    window.location.href = '/' + repoName + path;
+                } else {
+                    // Redirect to home page
+                    window.location.href = '/' + repoName;
+                }
+            }
+        })();
+    </script>
+    <style>
+        .not-found-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 60vh;
+            text-align: center;
+            padding: 2rem;
+        }
+        
+        .not-found-title {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        
+        .not-found-message {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .back-button {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            background-color: var(--secondary);
+            color: var(--dark);
+            font-weight: 500;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .back-button:hover {
+            background-color: var(--light);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="nav-container">
+                <div class="brand-container">
+                    <div class="logo">CURATOR</div>
+                    <div class="tagline">ALGORITHMIC ACCESS MANAGEMENT</div>
+                    <div class="blackcode-badge">A solution by <a href="https://blackcode.ch" target="_blank">blackcode SA</a></div>
+                </div>
+                
+                <nav>
+                    <ul class="nav-menu">
+                        <li><a href="/">Home</a></li>
+                        <li><a href="/demo">Live Demo</a></li>
+                        <li><a href="/dashboard">Dashboard</a></li>
+                        <li><a href="/contact">Contact Us</a></li>
+                    </ul>
+                    <div class="hamburger">
+                        <span class="bar"></span>
+                        <span class="bar"></span>
+                        <span class="bar"></span>
+                    </div>
+                </nav>
+            </div>
+        </div>
+    </header>
+    
+    <div class="container">
+        <section class="not-found-container">
+            <h1 class="not-found-title">Page Not Found</h1>
+            <p class="not-found-message">We couldn't find the page you were looking for.</p>
+            <a href="/" class="back-button">Back to Home</a>
+        </section>
+    </div>
+    
+    <footer>
+        <div class="container">
+            <p>CURATOR • Premium Access Management • Inquiries: <a href="mailto:inquiries@blackcode.ch">inquiries@blackcode.ch</a></p>
+            <p class="blackcode-badge">Developed by <a href="https://blackcode.ch" target="_blank">blackcode SA</a> — Swiss boutique web and app agency for luxury brands</p>
+        </div>
+    </footer>
+
+    <script src="/js/nav.js"></script>
+</body>
+</html> 

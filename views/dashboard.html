@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://code.jquery.com https://unpkg.com https://d3js.org https://threejs.org https://cdn.plot.ly https://stackpath.bootstrapcdn.com https://maps.googleapis.com https://cdn.tailwindcss.com https://ajax.googleapis.com https://kit.fontawesome.com https://cdn.datatables.net https://maxcdn.bootstrapcdn.com https://code.highcharts.com https://tako-static-assets-production.s3.amazonaws.com https://www.youtube.com https://fonts.googleapis.com https://fonts.gstatic.com https://pfst.cf2.poecdn.net https://puc.poecdn.net https://i.imgur.com https://wikimedia.org https://*.icons8.com https://*.giphy.com https://picsum.photos https://images.unsplash.com; frame-src 'self' https://www.youtube.com https://trytako.com; child-src 'self'; manifest-src 'self'; worker-src 'self'; upgrade-insecure-requests; block-all-mixed-content;">
+    <title>CURATOR | Admin Dashboard</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;400;500&display=swap" rel="stylesheet">
+    <style>
+        .dashboard-container {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            min-height: calc(100vh - 180px);
+        }
+        
+        .sidebar {
+            background-color: rgba(0,0,0,0.3);
+            padding: 2rem 1rem;
+            border-right: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .sidebar-menu {
+            list-style: none;
+        }
+        
+        .sidebar-menu li {
+            margin-bottom: 1rem;
+        }
+        
+        .sidebar-menu a {
+            color: var(--light);
+            text-decoration: none;
+            display: block;
+            padding: 0.5rem 1rem;
+            border-left: 3px solid transparent;
+            transition: all 0.3s ease;
+        }
+        
+        .sidebar-menu a:hover,
+        .sidebar-menu a.active {
+            border-left: 3px solid var(--secondary);
+            background-color: rgba(255,255,255,0.05);
+        }
+        
+        .main-content {
+            padding: 2rem;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-card {
+            background-color: rgba(255,255,255,0.05);
+            padding: 1.5rem;
+            border-radius: 5px;
+            border-bottom: 3px solid var(--secondary);
+        }
+        
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 200;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.1rem;
+        }
+        
+        .client-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 2rem;
+        }
+        
+        .client-table th {
+            text-align: left;
+            padding: 1rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            color: var(--secondary);
+            font-weight: 400;
+        }
+        
+        .client-table td {
+            padding: 1rem;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        
+        .client-table tr:hover {
+            background-color: rgba(255,255,255,0.03);
+        }
+        
+        .status-indicator {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 5px;
+        }
+        
+        .status-indicator.active {
+            background-color: #4CAF50;
+        }
+        
+        .status-indicator.inactive {
+            background-color: #F44336;
+        }
+        
+        .chart-container {
+            background-color: rgba(255,255,255,0.05);
+            padding: 1.5rem;
+            border-radius: 5px;
+            margin-top: 2rem;
+            position: relative;
+        }
+        
+        .chart-container h3 {
+            margin-bottom: 1rem;
+            color: var(--secondary);
+        }
+        
+        #activityChart, #timeChart, #locationChart, #wealthChart {
+            width: 100%;
+            height: calc(100% - 40px);
+            position: relative;
+        }
+        
+        .demo-notice {
+            background-color: rgba(255, 255, 255, 0.05);
+            border-left: 3px solid var(--secondary);
+            padding: 1rem;
+            margin-bottom: 2rem;
+            font-size: 0.9rem;
+        }
+        
+        .dashboard-tab {
+            display: none;
+        }
+        
+        .dashboard-tab.active {
+            display: block;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--secondary);
+            font-size: 0.9rem;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 0.75rem;
+            background-color: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: var(--light);
+            font-family: 'Montserrat', sans-serif;
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: var(--secondary);
+        }
+        
+        .settings-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        
+        .settings-card {
+            background-color: rgba(255,255,255,0.05);
+            padding: 1.5rem;
+            border-radius: 5px;
+        }
+        
+        .settings-card h3 {
+            color: var(--secondary);
+            margin-bottom: 1rem;
+            font-weight: 400;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding-bottom: 0.5rem;
+        }
+        
+        .slider-container {
+            margin-bottom: 1rem;
+        }
+        
+        .slider-value {
+            float: right;
+            color: var(--secondary);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="nav-container">
+                <div class="brand-container">
+                    <div class="logo">CURATOR</div>
+                    <div class="tagline">ADMIN DASHBOARD</div>
+                    <div class="blackcode-badge">A solution by <a href="https://blackcode.ch" target="_blank">blackcode SA</a></div>
+                </div>
+                
+                <nav>
+                    <ul class="nav-menu">
+                        <li><a href="/">Home</a></li>
+                        <li><a href="/demo">Live Demo</a></li>
+                        <li><a href="/admin" class="active">Dashboard</a></li>
+                        <li><a href="/contact">Contact Us</a></li>
+                    </ul>
+                    <div class="hamburger">
+                        <span class="bar"></span>
+                        <span class="bar"></span>
+                        <span class="bar"></span>
+                    </div>
+                </nav>
+            </div>
+        </div>
+    </header>
+    
+    <div class="container">
+        <div class="dashboard-container">
+            <div class="sidebar">
+                <ul class="sidebar-menu">
+                    <li><a href="#" class="active" data-tab="dashboard">Dashboard</a></li>
+                    <li><a href="#" data-tab="clients">Client Database</a></li>
+                    <li><a href="#" data-tab="settings">Recognition Settings</a></li>
+                    <li><a href="#" data-tab="logs">Access Logs</a></li>
+                    <li><a href="#" data-tab="analytics">Analytics</a></li>
+                    <li><a href="#" data-tab="config">System Configuration</a></li>
+                    <li><a href="#" data-tab="users">User Management</a></li>
+                </ul>
+            </div>
+            
+            <div class="main-content">
+                <div class="demo-notice">
+                    <strong>Demo Environment</strong>: This dashboard is for demonstration purposes only. All data shown is simulated and does not represent real individuals or actual recognition events. In a production environment, this dashboard would be secured and contain actual recognition data.
+                </div>
+                
+                <!-- Dashboard Overview Tab -->
+                <div id="dashboard" class="dashboard-tab active">
+                    <h1>Dashboard Overview</h1>
+                    <p>System status and key metrics</p>
+                    
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-value">127</div>
+                            <div class="stat-label">Verified HNWIs</div>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <div class="stat-value">43</div>
+                            <div class="stat-label">Today's Recognitions</div>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <div class="stat-value">92%</div>
+                            <div class="stat-label">Recognition Accuracy</div>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <div class="stat-value">3</div>
+                            <div class="stat-label">Active Locations</div>
+                        </div>
+                    </div>
+                    
+                    <h2>Recent Recognition Events</h2>
+                    
+                    <table class="client-table">
+                        <thead>
+                            <tr>
+                                <th>Client</th>
+                                <th>Time</th>
+                                <th>Location</th>
+                                <th>Status</th>
+                                <th>Confidence</th>
+                                <th>Wealth Score</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>James Reynolds</td>
+                                <td>Today, 14:32</td>
+                                <td>Milan Flagship</td>
+                                <td><span class="status-indicator active"></span> Granted</td>
+                                <td>98%</td>
+                                <td>9.8</td>
+                            </tr>
+                            <tr>
+                                <td>Victoria Chen</td>
+                                <td>Today, 13:47</td>
+                                <td>Paris Gallery</td>
+                                <td><span class="status-indicator active"></span> Granted</td>
+                                <td>96%</td>
+                                <td>9.5</td>
+                            </tr>
+                            <tr>
+                                <td>Unknown</td>
+                                <td>Today, 12:15</td>
+                                <td>New York Event</td>
+                                <td><span class="status-indicator active"></span> Granted</td>
+                                <td>87%</td>
+                                <td>8.7</td>
+                            </tr>
+                            <tr>
+                                <td>Unknown</td>
+                                <td>Today, 11:32</td>
+                                <td>Milan Flagship</td>
+                                <td><span class="status-indicator inactive"></span> Denied</td>
+                                <td>62%</td>
+                                <td>5.1</td>
+                            </tr>
+                            <tr>
+                                <td>Alexander Müller</td>
+                                <td>Today, 10:08</td>
+                                <td>London Boutique</td>
+                                <td><span class="status-indicator active"></span> Granted</td>
+                                <td>93%</td>
+                                <td>9.3</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                    <div class="chart-container">
+                        <h3>Recognition Activity (Last 7 Days)</h3>
+                        <!-- Chart would be rendered here with JavaScript -->
+                        <div id="activityChart" style="width: 100%; height: 100%;"></div>
+                    </div>
+                </div>
+                
+                <!-- Client Database Tab -->
+                <div id="clients" class="dashboard-tab">
+                    <h1>Client Database</h1>
+                    <p>Manage your registered high-value individuals</p>
+                    
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Search clients...">
+                    </div>
+                    
+                    <table class="client-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Last Visit</th>
+                                <th>Location</th>
+                                <th>Wealth Score</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>001</td>
+                                <td>James Reynolds</td>
+                                <td>Today, 14:32</td>
+                                <td>Milan Flagship</td>
+                                <td>9.8</td>
+                                <td><span class="status-indicator active"></span> Active</td>
+                                <td>
+                                    <a href="#" class="view-link">View</a>
+                                    <a href="#" class="edit-link">Edit</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>002</td>
+                                <td>Victoria Chen</td>
+                                <td>Today, 13:47</td>
+                                <td>Paris Gallery</td>
+                                <td>9.5</td>
+                                <td><span class="status-indicator active"></span> Active</td>
+                                <td>
+                                    <a href="#" class="view-link">View</a>
+                                    <a href="#" class="edit-link">Edit</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>003</td>
+                                <td>Alexander Müller</td>
+                                <td>Today, 10:08</td>
+                                <td>London Boutique</td>
+                                <td>9.3</td>
+                                <td><span class="status-indicator active"></span> Active</td>
+                                <td>
+                                    <a href="#" class="view-link">View</a>
+                                    <a href="#" class="edit-link">Edit</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>004</td>
+                                <td>Elizabeth Kingston</td>
+                                <td>Yesterday, 16:21</td>
+                                <td>New York Event</td>
+                                <td>9.7</td>
+                                <td><span class="status-indicator active"></span> Active</td>
+                                <td>
+                                    <a href="#" class="view-link">View</a>
+                                    <a href="#" class="edit-link">Edit</a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <!-- Recognition Settings Tab -->
+                <div id="settings" class="dashboard-tab">
+                    <h1>Recognition Settings</h1>
+                    <p>Configure the AI recognition parameters</p>
+                    
+                    <div class="settings-grid">
+                        <div class="settings-card">
+                            <h3>Detection Parameters</h3>
+                            
+                            <div class="slider-container">
+                                <label>Confidence Threshold <span class="slider-value">75%</span></label>
+                                <input type="range" min="0" max="100" value="75" class="form-control">
+                                <small>Minimum confidence score required to register a detection</small>
+                            </div>
+                            
+                            <div class="slider-container">
+                                <label>Wealth Score Threshold <span class="slider-value">8.5</span></label>
+                                <input type="range" min="0" max="10" step="0.1" value="8.5" class="form-control">
+                                <small>Minimum wealth score for granting access to unknown individuals</small>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>Detection Mode</label>
+                                <select class="form-control">
+                                    <option>High Accuracy (slower)</option>
+                                    <option selected>Balanced</option>
+                                    <option>High Speed (less accurate)</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="settings-card">
+                            <h3>Access Rules</h3>
+                            
+                            <div class="form-group">
+                                <label><input type="checkbox" checked> Auto-grant access to known HNWIs</label>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label><input type="checkbox" checked> Consider wealth indicators for unknown individuals</label>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label><input type="checkbox"> Require manual approval for unknown individuals</label>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label><input type="checkbox" checked> Log all recognition events</label>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label><input type="checkbox" checked> Send notifications for high-value client visits</label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button class="cta-button" style="margin-top: 2rem;">Save Settings</button>
+                </div>
+                
+                <!-- Access Logs Tab -->
+                <div id="logs" class="dashboard-tab">
+                    <h1>Access Logs</h1>
+                    <p>Historical record of all recognition events</p>
+                    
+                    <div class="form-group" style="display: flex; gap: 1rem;">
+                        <input type="date" class="form-control" style="width: auto;" value="2023-04-20">
+                        <input type="text" class="form-control" placeholder="Filter by name, location...">
+                        <button class="cta-button">Apply</button>
+                    </div>
+                    
+                    <table class="client-table">
+                        <thead>
+                            <tr>
+                                <th>Time</th>
+                                <th>Client</th>
+                                <th>Location</th>
+                                <th>Status</th>
+                                <th>Confidence</th>
+                                <th>Wealth Score</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Apr 20, 14:32</td>
+                                <td>James Reynolds</td>
+                                <td>Milan Flagship</td>
+                                <td><span class="status-indicator active"></span> Granted</td>
+                                <td>98%</td>
+                                <td>9.8</td>
+                            </tr>
+                            <tr>
+                                <td>Apr 20, 13:47</td>
+                                <td>Victoria Chen</td>
+                                <td>Paris Gallery</td>
+                                <td><span class="status-indicator active"></span> Granted</td>
+                                <td>96%</td>
+                                <td>9.5</td>
+                            </tr>
+                            <tr>
+                                <td>Apr 20, 12:15</td>
+                                <td>Unknown</td>
+                                <td>New York Event</td>
+                                <td><span class="status-indicator active"></span> Granted</td>
+                                <td>87%</td>
+                                <td>8.7</td>
+                            </tr>
+                            <tr>
+                                <td>Apr 20, 11:32</td>
+                                <td>Unknown</td>
+                                <td>Milan Flagship</td>
+                                <td><span class="status-indicator inactive"></span> Denied</td>
+                                <td>62%</td>
+                                <td>5.1</td>
+                            </tr>
+                            <tr>
+                                <td>Apr 20, 10:08</td>
+                                <td>Alexander Müller</td>
+                                <td>London Boutique</td>
+                                <td><span class="status-indicator active"></span> Granted</td>
+                                <td>93%</td>
+                                <td>9.3</td>
+                            </tr>
+                            <tr>
+                                <td>Apr 19, 16:21</td>
+                                <td>Elizabeth Kingston</td>
+                                <td>New York Event</td>
+                                <td><span class="status-indicator active"></span> Granted</td>
+                                <td>97%</td>
+                                <td>9.7</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <!-- The other tabs would be implemented similarly -->
+                <div id="analytics" class="dashboard-tab">
+                    <h1>Analytics</h1>
+                    <p>Advanced insights on recognition patterns and client behaviors</p>
+                    
+                    <div class="chart-container" style="height: 400px;">
+                        <h3>Access Patterns by Time of Day</h3>
+                        <div id="timeChart" style="width: 100%; height: 100%;"></div>
+                    </div>
+                    
+                    <div class="stats-grid" style="margin-top: 2rem;">
+                        <div class="chart-container">
+                            <h3>Recognition by Location</h3>
+                            <div id="locationChart" style="width: 100%; height: 100%;"></div>
+                        </div>
+                        
+                        <div class="chart-container">
+                            <h3>Wealth Score Distribution</h3>
+                            <div id="wealthChart" style="width: 100%; height: 100%;"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="config" class="dashboard-tab">
+                    <h1>System Configuration</h1>
+                    <p>Technical settings for the CURATOR platform</p>
+                    
+                    <div class="settings-grid">
+                        <div class="settings-card">
+                            <h3>Camera Configuration</h3>
+                            
+                            <div class="form-group">
+                                <label>Resolution</label>
+                                <select class="form-control">
+                                    <option>4K (3840x2160)</option>
+                                    <option selected>Full HD (1920x1080)</option>
+                                    <option>HD (1280x720)</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>Frame Rate</label>
+                                <select class="form-control">
+                                    <option>60 FPS</option>
+                                    <option selected>30 FPS</option>
+                                    <option>15 FPS</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>Camera Position</label>
+                                <select class="form-control">
+                                    <option selected>Entry Point</option>
+                                    <option>Reception Area</option>
+                                    <option>Multiple Points</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="settings-card">
+                            <h3>System Integration</h3>
+                            
+                            <div class="form-group">
+                                <label>Access Control System</label>
+                                <select class="form-control">
+                                    <option selected>Electronic Door Lock</option>
+                                    <option>Staff Alert System</option>
+                                    <option>Combined Approach</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>CRM Integration</label>
+                                <select class="form-control">
+                                    <option selected>Salesforce</option>
+                                    <option>Microsoft Dynamics</option>
+                                    <option>Custom API</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>Notification Method</label>
+                                <select class="form-control">
+                                    <option>Email</option>
+                                    <option>SMS</option>
+                                    <option selected>Mobile App</option>
+                                    <option>All Methods</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button class="cta-button" style="margin-top: 2rem;">Apply Configuration</button>
+                </div>
+                
+                <div id="users" class="dashboard-tab">
+                    <h1>User Management</h1>
+                    <p>Manage administration access to the CURATOR dashboard</p>
+                    
+                    <table class="client-table user-table">
+                        <thead>
+                            <tr>
+                                <th>Username</th>
+                                <th>Role</th>
+                                <th>Locations</th>
+                                <th>Last Login</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>admin</td>
+                                <td>System Administrator</td>
+                                <td>All Locations</td>
+                                <td>Today, 09:15</td>
+                                <td><span class="status-indicator active"></span> Active</td>
+                                <td>
+                                    <a href="#" class="edit-link">Edit</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>milan_manager</td>
+                                <td>Location Manager</td>
+                                <td>Milan Flagship</td>
+                                <td>Today, 10:22</td>
+                                <td><span class="status-indicator active"></span> Active</td>
+                                <td>
+                                    <a href="#" class="edit-link">Edit</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>paris_staff</td>
+                                <td>Staff Member</td>
+                                <td>Paris Gallery</td>
+                                <td>Yesterday, 17:45</td>
+                                <td><span class="status-indicator active"></span> Active</td>
+                                <td>
+                                    <a href="#" class="edit-link">Edit</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>nyc_manager</td>
+                                <td>Location Manager</td>
+                                <td>New York Event</td>
+                                <td>Apr 19, 14:10</td>
+                                <td><span class="status-indicator active"></span> Active</td>
+                                <td>
+                                    <a href="#" class="edit-link">Edit</a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                    <button class="cta-button" style="margin-top: 2rem;">Add New User</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <div class="container">
+            <p>CURATOR • Premium Access Management • Inquiries: <a href="mailto:inquiries@blackcode.ch">inquiries@blackcode.ch</a></p>
+            <p class="blackcode-badge">Developed by <a href="https://blackcode.ch" target="_blank">blackcode SA</a> — Swiss boutique web and app agency for luxury brands</p>
+        </div>
+    </footer>
+
+    <script src="/js/nav.js"></script>
+    <script src="/js/dashboard.js"></script>
+</body>
+</html> 

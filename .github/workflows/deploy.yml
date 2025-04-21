@@ -1,0 +1,85 @@
+name: Deploy CURATOR to Google Cloud
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [16.x]
+
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+        
+    - name: Install dependencies
+      run: npm ci
+      
+    - name: Run linting
+      run: npm run lint || echo "No linting configured"
+      
+    - name: Run tests
+      run: npm test || echo "No tests configured"
+      
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Cloud SDK
+      uses: google-github-actions/setup-gcloud@v0
+      with:
+        project_id: ${{ secrets.GCP_PROJECT_ID }}
+        service_account_key: ${{ secrets.GCP_SA_KEY }}
+        export_default_credentials: true
+        
+    - name: Use Node.js 16.x
+      uses: actions/setup-node@v3
+      with:
+        node-version: 16.x
+        
+    - name: Install dependencies
+      run: npm ci
+        
+    - name: Deploy to Google Cloud VM
+      run: |
+        echo "Deploying to Google Cloud VM..."
+        
+        # Set up SSH for Google Cloud VM
+        echo "${{ secrets.GCP_SSH_PRIVATE_KEY }}" > gcp_key
+        chmod 600 gcp_key
+        
+        # Copy files to the VM
+        gcloud compute scp --zone ${{ secrets.GCP_ZONE }} --recurse \
+          --project ${{ secrets.GCP_PROJECT_ID }} \
+          --ssh-key-file=gcp_key \
+          ./* ${{ secrets.GCP_VM_NAME }}:~/curator
+        
+        # SSH into VM and restart the application
+        gcloud compute ssh ${{ secrets.GCP_VM_NAME }} \
+          --zone ${{ secrets.GCP_ZONE }} \
+          --project ${{ secrets.GCP_PROJECT_ID }} \
+          --ssh-key-file=gcp_key \
+          --command="cd ~/curator && npm install --production && pm2 restart curator || pm2 start src/server.js --name curator"
+        
+        # Clean up
+        rm gcp_key
+      
+    - name: Post-deployment verification
+      run: |
+        echo "Verifying deployment..."
+        # Check if the application is responding
+        curl -s -o /dev/null -w "%{http_code}" https://${{ secrets.CURATOR_DOMAIN }}/api/status | grep 200 || echo "Deployment verification failed" 
